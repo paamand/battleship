@@ -636,20 +636,31 @@ class _BattleshipGamePageState extends State<BattleshipGamePage>
 
   void _handleTap(
     int playerId,
-    TapDownDetails details,
+    Offset localPosition,
     Size paneSize,
     bool mirrored,
   ) {
     final worldPoint = _toWorldPoint(
       playerId: playerId,
-      localPosition: details.localPosition,
+      localPosition: localPosition,
       paneSize: paneSize,
       mirrored: mirrored,
     );
     final player = _ships[playerId];
 
-    if (player.sunk ||
-        _sectionFromWorldPoint(ship: player, point: worldPoint) != null) {
+    if (player.sunk) {
+      return;
+    }
+
+    final tappedOwnShip =
+        _sectionFromWorldPoint(
+          ship: player,
+          point: worldPoint,
+          hitPadding: _shipWidth * 0.6,
+        ) !=
+        null;
+    if (tappedOwnShip) {
+      _deployMine(playerId);
       return;
     }
 
@@ -849,7 +860,7 @@ class _BattleshipGamePageState extends State<BattleshipGamePage>
 
   Widget _buildInfoArea() {
     return Container(
-      height: 138,
+      height: 100,
       decoration: const BoxDecoration(
         border: Border.symmetric(
           horizontal: BorderSide(color: Colors.black, width: 2),
@@ -871,13 +882,6 @@ class _BattleshipGamePageState extends State<BattleshipGamePage>
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    const Text(
-                      'SCORE',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
                     Text(
                       '${_ships[0].score} : ${_ships[1].score}',
                       style: const TextStyle(
@@ -904,7 +908,7 @@ class _BattleshipGamePageState extends State<BattleshipGamePage>
   Widget _buildPlayerInfo({required int playerId}) {
     final ship = _ships[playerId];
     return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 6, 10, 4),
+      padding: const EdgeInsets.fromLTRB(10, 4, 10, 4),
       child: SingleChildScrollView(
         physics: const NeverScrollableScrollPhysics(),
         child: Column(
@@ -912,7 +916,7 @@ class _BattleshipGamePageState extends State<BattleshipGamePage>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              'P${playerId + 1} CONTROL',
+              'PLAYER ${playerId + 1}: ${_playerStatus[playerId]}',
               style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700),
             ),
             const SizedBox(height: 2),
@@ -932,28 +936,6 @@ class _BattleshipGamePageState extends State<BattleshipGamePage>
               label: 'Mine',
               remaining: ship.mineCooldown,
               total: _mineCooldownSeconds,
-            ),
-            const SizedBox(height: 2),
-            Text(
-              'State: ${_playerStatus[playerId]}',
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontSize: 10, fontStyle: FontStyle.italic),
-            ),
-            const SizedBox(height: 2),
-            SizedBox(
-              height: 24,
-              child: OutlinedButton(
-                onPressed: ship.mineCooldown <= 0 && !ship.sunk
-                    ? () => _deployMine(playerId)
-                    : null,
-                style: OutlinedButton.styleFrom(
-                  side: const BorderSide(color: Colors.black, width: 2),
-                  foregroundColor: Colors.black,
-                  padding: EdgeInsets.zero,
-                ),
-                child: const Text('MINE'),
-              ),
             ),
           ],
         ),
@@ -1031,8 +1013,12 @@ class _BattleshipGamePageState extends State<BattleshipGamePage>
                 return ClipRect(
                   child: GestureDetector(
                     behavior: HitTestBehavior.opaque,
-                    onTapDown: (details) =>
-                        _handleTap(playerId, details, paneSize, mirrored),
+                    onTapUp: (details) => _handleTap(
+                      playerId,
+                      details.localPosition,
+                      paneSize,
+                      mirrored,
+                    ),
                     onLongPressStart: (details) =>
                         _handleLongPress(playerId, details, paneSize, mirrored),
                     onPanStart: (details) =>

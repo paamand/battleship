@@ -9,6 +9,8 @@ void main() {
     expect(find.textContaining('SCORE'), findsOneWidget);
     expect(find.textContaining('P1 CONTROL'), findsOneWidget);
     expect(find.textContaining('P2 CONTROL'), findsOneWidget);
-    expect(find.text('MINE'), findsNWidgets(2));
+    expect(find.textContaining('Missile:'), findsNWidgets(2));
+    expect(find.textContaining('Torpedo:'), findsNWidgets(2));
+    expect(find.textContaining('Mine:'), findsNWidgets(2));
   });
 }

@@ -6,6 +6,9 @@ This is an experiment to hands-on create a playable game entirely vibe-coded usi
 # Prompt
 Read the attached SPEC.md. Use flutter and the Flutter MCP to complete the entre coding task to produce a playable game.
 
+# Icons
+Made with Gemini, added via flutter_launcher_icons
+
 # Adjustments (prompts after the game was created)
 
 - The game screen is a shared split-screen with both players playing at the same time. The tablet is locked to portrait mode with player one playing at the normal orientation (bottom)and player two from the top-down mirrored.
@@ -33,3 +36,9 @@ If a missile hits a mine, the mine is exploded and deleted.
 
 - You can hit your own mines and explode.
 
+- Instead of the MINE button, deploy a mine when I tap on the ship.
+
+- When I long-press on the map to fire a torpedo a missile is usually fired as well. Can the missile action (tap) and torpedo action (longpress) be more elegantly resolved? If very difficult, the current behaviour is acceptable.
+
+## Manual edits
+Adjusted ship size and world size. Adjusted info-area a bit. Changed color of radar-border.
