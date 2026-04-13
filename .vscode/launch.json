@@ -1,0 +1,44 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "flyon (debug)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "debug"
+        },
+        {
+            "name": "flyon (debug no-pub)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "debug",
+            "toolArgs": ["--no-pub"]
+        },
+        {
+            "name": "flyon (release)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "flyon (release no-pub)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release",
+            "toolArgs": ["--no-pub"]
+        },
+        {
+            "name": "flyon (profile)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "flyon (profile no-pub)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile",
+            "toolArgs": ["--no-pub"]
+        }
+    ]
+}
